@@ -1,6 +1,13 @@
 #!/bin/ksh
 
 # Basic environment and standard log/tmp file setup
+# 
+# Expected directory structure
+#
+#  installdir --> base directory to contain directories of bin, log etc
+#  installdir/bin --> To keep all scripts
+#  installdir/log --> For log and tmp files
+#
 
 export oratab=/etc/oratab
 
@@ -22,7 +29,7 @@ cd $scriptdir
 scriptdir=`pwd`
 installdir=`dirname $scriptdir`
 
-logdir=${scriptdir}
+logdir=${installdir}/log
 logfile=${logdir}/${script}.log
 tmpfile1=${logdir}/${script}.tmp1
 tmpfile2=${logdir}/${script}.tmp2
