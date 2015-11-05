@@ -1,0 +1,2 @@
+https://www.krenger.ch/blog/oracle-11g-r2-response-file-example/
+http://www.krenger.ch/blog/oracle-12c-response-file-example/
