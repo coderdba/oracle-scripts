@@ -2,7 +2,6 @@
 #--------------------------------------------------------------------------------
 #
 # createdb12c.sh
-# Gowrish M
 # Sep 2014
 #
 # to create oracle 12c rac database
