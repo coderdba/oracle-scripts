@@ -3,7 +3,6 @@
 #  subroutines.sh
 #
 #  subroutines for createdb.sh
-#  gowrish m
 #  sep 2014
 #
 #---------------------------------------------------------------------
