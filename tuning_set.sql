@@ -8,17 +8,17 @@ DECLARE
   v_tune_taskid  VARCHAR2(100);
 BEGIN
   v_tune_taskid := dbms_sqltune.create_tuning_task (
-                          sql_id      => '4d52dww11d728',
+                          sql_id      => 'dfd43243dsfsfs',
                           scope       => dbms_sqltune.scope_comprehensive,
                           time_limit  => 30,
-                          task_name   => 'sqltune_4d52dww11d728',
+                          task_name   => 'sqltune_dfd43243dsfsfs',
                           description => 'Tuning task sql_id 4d52dww11d728');
   dbms_output.put_line('taskid = ' || v_tune_taskid);
 END;
 /
 
 -- Run the task
-exec dbms_sqltune.execute_tuning_task(task_name => 'sqltune_4d52dww11d728');
+exec dbms_sqltune.execute_tuning_task(task_name => 'sqltune_dfd43243dsfsfs');
 
 -- Verify completion
 select task_name, status
@@ -30,7 +30,7 @@ set long 10000;
 set pagesize 1000
 set linesize 220
 set pagesize 24
---select dbms_sqltune.report_tuning_task('4d52dww11d728_tune_report') as output
 
-select dbms_sqltune.report_tuning_task('sqltune_4d52dww11d728') as output
-from dual;
+set long 2000000000
+select dbms_sqltune.report_tuning_task('sqltune_dfd43243dsfsfs') as output from dual;
+select dbms_sqltune.report_tuning_task('sqltune_dfd43243dsfsfs') as recommendations from dual;
