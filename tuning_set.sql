@@ -1,3 +1,9 @@
+-- Increase time limit for the advisor task to use (to avoid timeout error)
+--    the current operation was interrupted because it timed out
+-- http://www.dba-oracle.com/t_ora_13639_current_operation_was_interrupted_timeout.htm
+BEGIN   DBMS_SQLTUNE.SET_AUTO_TUNING_TASK_PARAMETER(parameter => 'TIME_LIMIT', value => '7200'); END;
+
+-- Create the task
 DECLARE
   v_tune_taskid  VARCHAR2(100);
 BEGIN
@@ -11,12 +17,15 @@ BEGIN
 END;
 /
 
+-- Run the task
 exec dbms_sqltune.execute_tuning_task(task_name => 'sqltune_4d52dww11d728');
 
+-- Verify completion
 select task_name, status
 from dba_advisor_log
 where owner = 'SYS';
 
+-- Generate advisor output
 set long 10000;
 set pagesize 1000
 set linesize 220
