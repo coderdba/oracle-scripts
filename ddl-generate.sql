@@ -5,10 +5,10 @@ set echo off;
 Set pages 999;
 set long 90000;
 
-spool ddl_list.sql
+select dbms_metadata.get_ddl('<<OBJECT TYPE>>','<OBJECT NAME>>','<<OWNER>>') from dual;
 select dbms_metadata.get_ddl('TABLE','DEPT','SCOTT') from dual; 
 select dbms_metadata.get_ddl('INDEX','DEPT_IDX','SCOTT') from dual;
-spool off;
+
 
 -- For schema
 
