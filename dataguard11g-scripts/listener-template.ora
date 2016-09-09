@@ -1,0 +1,15 @@
+# Add the unique-name and dgmgrl entries 
+#   - for respective side in both primary and standby
+#   - in all nodes of each side
+
+SID_LIST_LISTENER=
+  (SID_LIST =
+    (SID_DESC = (GLOBAL_DBNAME = DB_UNIQUE_NAME) (ORACLE_HOME = <the oracle home>) (SID_NAME = <sid for the node> ))
+    (SID_DESC = (GLOBAL_DBNAME = DB_UNIQUE_NAME_DGMGRL) (ORACLE_HOME = <the oracle home>) (SID_NAME = <sid for the node> ))
+  )
+# Example (site1 node1)
+SID_LIST_LISTENER=
+  (SID_LIST =
+    (SID_DESC = (GLOBAL_DBNAME = MYDB_SITE1) (ORACLE_HOME = /u01/app/oracle/product/11.2.0.4/dbhome_1) (SID_NAME = MYDB1))
+    (SID_DESC = (GLOBAL_DBNAME = MYDB_SITE1_DGMGRL) (ORACLE_HOME = /u01/app/oracle/product/11.2.0.4/dbhome_1) (SID_NAME = MYDB1))
+  )
