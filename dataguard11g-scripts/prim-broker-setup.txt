@@ -1,0 +1,5 @@
+# DGMGRL> 
+create configuration 'DG_DB_NAME' as primary database is 'PRIM_DB_UNIQUE_NAME' connect identifier is 'PRIM_DB_UNIQUE_NAME';
+add database 'STBY_DB_UNIQUE_NAME' as connect identifier is 'STBY_DB_UNIQUE_NAME' maintained as physical;
+enable configuration;
+show configuration;
