@@ -1,0 +1,17 @@
+ <Primary_DB_Unique_Name> =
+     (DESCRIPTION =
+         (ADDRESS = (PROTOCOL = TCP)(HOST = <Primary Scan Name> )(PORT = <Port>))
+         (CONNECT_DATA =
+               (SERVER=DEDICATED)
+               (SERVICE_NAME = <Primary_DB_Unique_Name>)
+         )
+     )
+
+ <Stby_DB_Unique_name> =
+     (DESCRIPTION =
+           (ADDRESS = (PROTOCOL = TCP)(HOST = <Standby Scan Name>)(PORT = <Port>))
+           (CONNECT_DATA =
+                 (SERVER=DEDICATED)
+                 (SERVICE_NAME = <Stby_DB_Unique_name>)
+           )
+     )
