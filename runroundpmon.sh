@@ -1,11 +1,9 @@
 #!/bin/ksh
 
-
 ps -ef|grep pmon |grep -v grep |grep -v ASM | grep -v ksh | while read line
 do
 
 sid=`echo $line | awk '{print $8}' | cut -d_ -f3`
-
 
 export ORACLE_SID=$sid
 export ORACLE_HOME=`grep $sid /etc/oratab | cut -d: -f2`
@@ -19,6 +17,8 @@ export LD_LIBRARAY_PATH=$ORACLE_HOME/lib
 sqlplus -s / as sysdba <<EOF
 
 set head off
+set lines 120
+column db_unique_name format a15
 
 /*
 select name, log_mode, database_role, open_mode from v\$database;
@@ -28,10 +28,11 @@ from (select (round ( sum(bytes)/(1024*1024*1024))) total_gb from v\$datafile) a
      (select (round ( sum(bytes)/(1024*1024*1024))) total_gb from v\$tempfile) b ;
 */
 
-select c.name, c.log_mode, c.database_role, c.open_mode, a.total_gb + b.total_gb total_size_gb
+select c.name, d.db_unique_name, c.log_mode, c.database_role, c.open_mode, (a.total_gb + b.total_gb) || ' GB' total_size_gb
 from (select (round ( sum(bytes)/(1024*1024*1024))) total_gb from v\$datafile) a,
      (select (round ( sum(bytes)/(1024*1024*1024))) total_gb from v\$tempfile) b,
-     (select name, log_mode, database_role, open_mode from v\$database) c;
+     (select name, log_mode, database_role, open_mode from v\$database) c,
+     (select value db_unique_name from v\$parameter where name='db_unique_name') d;
 
 EOF
 
