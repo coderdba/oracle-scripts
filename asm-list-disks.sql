@@ -25,4 +25,10 @@ select path from v$asm_disk where path like '%NEW%' order by 1;
 set pages 50
 set head on
 
+select a.name dg_name, b.name, b.path, b.group_number, b.failgroup
+from v$asm_diskgroup a, v$asm_disk b
+where a.group_number =b.group_number
+--and A.NAME like 'GRID%DG1'
+and b.path like '%99%';
+
 spool off
