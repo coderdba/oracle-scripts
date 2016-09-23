@@ -17,21 +17,52 @@ rmantmpfile2=${logfileformat}.rman.tmp2
 # need to get the new file name from the string
 #   output file name=+NEW_DG/<db_unique_name>/datafile/my_ts.1097.923044943 tag=TAG20160920T092223 RECID=5 STAMP=923044953
 
+
 cat $file_list_file | while read datafile
 do
 
-# First do rman copy datafile
+echo "INFO - Backup as copy of $datafile"
 rman target sys/password <<EOF > $rmantmpfile1
 BACKUP AS COPY DATAFILE "${datafile}" FORMAT "+${to_diskgroup}";
 EOF
 
+if (grep RMAN- $rmantmpfile1)
+then
+    echo "ERR - Error in backup-as-copy step for ${datafile}"
+    echo "      Look in $rmantmpfile1 (contents below)"
+    cat $rmantmpfile1
+    exit 1
+fi
 
-rman target sys/password <<EOF
+datafilecopy=`grep "output file name" $rmantmpfile1 | awk '{print $3}' | cut -d= -f2`
+
+echo "INFO - Switch and recover file $datafilecopy - copy of $datafile"
+rman target sys/password <<EOF > $rmantmpfile2
 SQL "ALTER DATABASE DATAFILE ''${datafile}'' OFFLINE";
 SWITCH DATAFILE "${datafile}" TO COPY;
 RECOVER DATAFILE "${datafilecopy}";
 SQL "ALTER DATABASE DATAFILE ''${datafilecopy}'' ONLINE";
+EOF
+
+if (grep RMAN- $rmantmpfile2)
+then
+    echo "ERR - Error in backup-as-copy step for ${datafile}"
+    echo "      Look in $rmantmpfile2 (contents below)"
+    cat $rmantmpfile2
+    exit 1
+fi
+
+echo "INFO - Delete file $datafile"
+rman target sys/password <<EOF > $rmantmpfile3
 DELETE DATAFILECOPY "${datafile}";
 EOF
+
+if (grep RMAN- $rmantmpfile3)
+then
+    echo "ERR - Error in backup-as-copy step for ${datafile}"
+    echo "      Look in $rmantmpfile3 (contents below)"
+    cat $rmantmpfile2
+    exit 1
+fi
 
 done
