@@ -1,4 +1,10 @@
 #!/bin/ksh
+#
+#  asm-move-datafile-with-rman.sh
+#
+#  Copy datafiles to another diskgroup
+#
+#
 
 if [ $# -lt 2 ]
 then
@@ -13,10 +19,13 @@ to_diskgroup=$2
 logfileformat=${script}.${file_list_file}.${to_diskgroup}
 rmantmpfile1=${logfileformat}.rman.tmp1
 rmantmpfile2=${logfileformat}.rman.tmp2
+rmantmpfile3=${logfileformat}.rman.tmp3
+logfile=${logfileformat}.log
 
 # need to get the new file name from the string
 #   output file name=+NEW_DG/<db_unique_name>/datafile/my_ts.1097.923044943 tag=TAG20160920T092223 RECID=5 STAMP=923044953
 
+exec > $logfile 2>> $logfile
 
 cat $file_list_file | while read datafile
 do
