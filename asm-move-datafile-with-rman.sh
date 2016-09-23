@@ -27,9 +27,14 @@ logfile=${logfileformat}.log
 
 exec > $logfile 2>> $logfile
 
+echo "INFO - Starting script $script for file-list $file_list_file to move to diskgroup $to_diskgroup" `date`
+
+# Loop through the file list
 cat $file_list_file | while read datafile
 do
 
+echo ""
+echo "INFO  - Starting $datafile" `date`
 echo "INFO - Backup as copy of $datafile"
 rman target sys/password <<EOF > $rmantmpfile1
 BACKUP AS COPY DATAFILE "${datafile}" FORMAT "+${to_diskgroup}";
@@ -74,4 +79,8 @@ then
     exit 1
 fi
 
+echo "INFO  - Ending $datafile" `date`
+
 done
+
+echo "INFO - Ending script $script for file-list $file_list_file to move to diskgroup $to_diskgroup" `date`
