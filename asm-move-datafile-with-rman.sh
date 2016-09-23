@@ -34,17 +34,20 @@ cat $file_list_file | while read datafile
 do
 
 echo ""
-echo "INFO  - Starting $datafile" `date`
+echo "INFO  - Starting file $datafile" `date`
 echo "INFO - Backup as copy of $datafile"
 rman target sys/password <<EOF > $rmantmpfile1
 BACKUP AS COPY DATAFILE "${datafile}" FORMAT "+${to_diskgroup}";
 EOF
 
+cat $rmantmpfile1
+echo
+
 if (grep RMAN- $rmantmpfile1)
 then
     echo "ERR - Error in backup-as-copy step for ${datafile}"
     echo "      Look in $rmantmpfile1 (contents below)"
-    cat $rmantmpfile1
+    #cat $rmantmpfile1
     exit 1
 fi
 
@@ -58,11 +61,14 @@ RECOVER DATAFILE "${datafilecopy}";
 SQL "ALTER DATABASE DATAFILE ''${datafilecopy}'' ONLINE";
 EOF
 
+cat $rmantmpfile2
+echo
+
 if (grep RMAN- $rmantmpfile2)
 then
     echo "ERR - Error in backup-as-copy step for ${datafile}"
     echo "      Look in $rmantmpfile2 (contents below)"
-    cat $rmantmpfile2
+    #cat $rmantmpfile2
     exit 1
 fi
 
@@ -71,15 +77,20 @@ rman target sys/password <<EOF > $rmantmpfile3
 DELETE DATAFILECOPY "${datafile}";
 EOF
 
+cat $rmantmpfile3
+echo
+
 if (grep RMAN- $rmantmpfile3)
 then
     echo "ERR - Error in backup-as-copy step for ${datafile}"
     echo "      Look in $rmantmpfile3 (contents below)"
-    cat $rmantmpfile2
+    #cat $rmantmpfile3
     exit 1
 fi
 
-echo "INFO  - Ending $datafile" `date`
+echo "INFO  - Ending file $datafile" `date`
+echo "-----------------------------------------------"
+echo
 
 done
 
