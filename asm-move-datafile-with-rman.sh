@@ -74,7 +74,7 @@ fi
 
 echo "INFO - Delete file $datafile"
 rman target sys/password <<EOF > $rmantmpfile3
-DELETE DATAFILECOPY "${datafile}";
+DELETE noprompt DATAFILECOPY "${datafile}";
 EOF
 
 cat $rmantmpfile3
