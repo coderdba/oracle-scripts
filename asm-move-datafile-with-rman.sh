@@ -82,7 +82,7 @@ echo
 
 if (grep RMAN- $rmantmpfile3)
 then
-    echo "ERR - Error in backup-as-copy step for ${datafile}"
+    echo "ERR - Error in delete-file step for ${datafile}"
     echo "      Look in $rmantmpfile3 (contents below)"
     #cat $rmantmpfile3
     exit 1
