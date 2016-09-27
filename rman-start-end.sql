@@ -1,0 +1,18 @@
+ALTER SESSION SET NLS_DATE_FORMAT = 'DD-MON-YY HH24:MI';
+--
+select
+  sys_context('USERENV','DB_UNIQUE_NAME') "dbname",
+  OUTPUT_DEVICE_TYPE "DEVICE",
+  TO_CHAR(START_TIME, 'mm/dd/yy hh24:mi') START_TIME,
+  TO_CHAR(END_TIME, 'mm/dd/yy hh24:mi') END_TIME,
+OPERATION, OBJECT_TYPE, STATUS,
+  INPUT_BYTES/1024 "INPUT_KB",
+  OUTPUT_BYTES/1024 "OUTPUT_KB"
+FROM
+  V$RMAN_STATUS
+where
+  START_TIME > (sysdate - 33) and
+  ROW_LEVEL > 0 and
+  OBJECT_TYPE like 'DB INCR%'
+  and OPERATION like 'BACKUP%'
+order by recid;
