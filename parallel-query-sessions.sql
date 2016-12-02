@@ -1,9 +1,9 @@
 
-
-set echo on
 -- Parent
+-- http://www.dba-oracle.com/t_v$_px_session.htm
 
 prompt Parent Sessions
+
 WITH px_session AS (
    SELECT
       qcsid,
@@ -35,52 +35,31 @@ AND
    sql.child_number = s.sql_child_number);
 
 -- Child
+-- http://www.dba-oracle.com/t_gv$px_session.htm
+
 prompt Child Sessions
  select
-
      ps.qcsid,
-
      ps.sid,
-
      p.spid,
-
      ps.inst_id,
-
      ps.degree,
-
      ps.req_degree
-
    from
  For full scripts, download the Oracle script collection.  
-
      gv$px_session ps
-
      join
-
      gv$session s
-
         on ps.sid=s.sid
-
            and
-
            ps.inst_id=s.inst_id
-
      join
-
      gv$process p
-
         on p.addr=s.paddr
-
         and
-
         p.inst_id=s.inst_id
-
    order by
-
      qcsid,
-
      server_group desc,
-
      inst_id,
-
      sid;
