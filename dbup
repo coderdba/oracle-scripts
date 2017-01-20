@@ -1,0 +1,7 @@
+if [ $# -lt 1 ]
+then
+echo ERR - provide db_unique_name as argument
+exit 1
+fi
+
+srvctl start database -d $1
