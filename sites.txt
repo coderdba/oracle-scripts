@@ -1,0 +1,1 @@
+https://bdrouvot.wordpress.com/2014/05/06/report-database-physical-io-activity-per-io-type-and-oracle-files-type-in-real-time/
