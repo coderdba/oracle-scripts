@@ -1,0 +1,69 @@
+#https://bdrouvot.wordpress.com/db_io_type_metrics_script/
+
+db_io_type_metrics
+db_io_type_metrics.pl main page
+
+The db_io_type_metrics.pl utility is used to display database physical IO type (small, large, synchronous, reads and writes) real-time metrics. It basically takes a snapshot each second (default interval) from the gv$iostat_file cumulative view and computes the delta with the previous snapshot. The utility is RAC and Multitenant aware.
+
+This utility:
+
+provides useful metrics.
+is RAC aware.
+detects if it is connected to a multitenant database and then is able to display the containers metrics.
+is fully customizable: you can aggregate the results depending on your needs.
+does not install anything into the database.
+It displays the following metrics per IO Type (small, large, synchronous, reads and writes):
+
+MB/s: Megabytes per second.
+RQ/s: Requests per second.
+Avg MB/RQ: Average Megabytes per request.
+Avg ms/RQ: Average ms per request.
+At the following levels:
+
+Database Instance.
+Database container.
+File Type (log file, control file, data file, temp file…) or tablespace.
+Let’s see the help:
+
+./db_io_type_metrics.pl -help
+
+Usage: ./db_io_type_metrics.pl [-interval] [-count] [-inst] [-cont] [-file_type_tbs] [-io_type] [-file_type] [-tbs] [-show] [-display] [-sort_field] [-help]
+
+ Default Interval : 1 second.
+ Default Count    : Unlimited
+
+  Parameter         Comment                                                                     Default
+  ---------         -------                                                                     -------
+  -INST=            ALL - Show all Instance(s)                                                  ALL
+                    CURRENT - Show Current Instance
+  -CONT=            Container to collect (wildcard allowed)                                     ALL
+  -FILE_TYPE_TBS=   Collect on File Type or on Tablespace: file_type,tbs                        FILE_TYPE
+  -IO_TYPE=         IO Type to collect: reads,writes,small,large,synch                          READS
+  -FILE_TYPE=       File Type to collect (in case FILE_TYPE_TBS=file_type) (wildcard allowed)   NONE
+  -TBS=             Tablespace to collect (in case FILE_TYPE_TBS=tbs) (wildcard allowed)        NONE
+  -SHOW=            What to show: inst,cont,file_type_tbs (comma separated list)                INST
+  -DISPLAY=         What to display: snap,avg (comma separated list)                            SNAP
+  -SORT_FIELD=      small_reads,small_writes,large_reads,large_writes                           NONE
+
+Example: ./db_io_type_metrics.pl
+Example: ./db_io_type_metrics.pl  -inst=CBDT1
+Example: ./db_io_type_metrics.pl  -show=inst,file_type_tbs
+Example: ./db_io_type_metrics.pl  -show=inst,file_type_tbs -file_type=%Data%
+Example: ./db_io_type_metrics.pl  -show=inst -io_type=large
+Example: ./db_io_type_metrics.pl  -show=inst -io_type=small -sort_field=small_reads
+Example: ./db_io_type_metrics.pl  -show=inst,file_type_tbs -file_type_tbs=tbs -tbs=%USE%
+Example: ./db_io_type_metrics.pl  -show=inst,cont
+Example: ./db_io_type_metrics.pl  -show=inst,cont -cont=%P%
+Example: ./db_io_type_metrics.pl  -show=inst,cont,file_type_tbs -io_type=small -sort_field=small_reads
+The main options/features are:
+
+You can choose the number of snapshots to display and the time to wait between snapshots.
+You can choose on which database instance to collect the metrics thanks to the –INST= parameter.
+You can choose on which database container to collect the metrics thanks to the -CONT= parameter.
+You can choose to collect on File Type or tablespace thanks to the -FILE_TYPE_TBS=parameter.
+You can choose on which IO Type to collect the metrics thanks to the -IO_TYPE= parameter.
+You can choose on which File Type to collect the metric thanks to the -FILE_TYPE=parameter (wilcard allowed).
+You can choose on which Tablespace to collect the metric thanks to the -TBS=parameter (wilcard allowed).
+You can aggregate the results on the database instances, containers, file type or tablespace level thanks to the –SHOW= parameter.
+You can display the metrics per snapshot, the average metrics value since the collection began (that is to say since the script has been launched) or both thanks to the –DISPLAY= parameter.
+You can sort based on the number of small_reads, number of small_writes, number of large_reads or number of large_writes thanks to the –SORT_FIELD= parameter.
